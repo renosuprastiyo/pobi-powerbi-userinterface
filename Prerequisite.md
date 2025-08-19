@@ -77,7 +77,7 @@ server {
 }
 ```
 
-We change reverse the port from 8789 to 7000 and use basic authentication header using base64 encryption with format base64('username:password')
+We reverse the port from 8789 into 7000 and use basic authentication header using base64 encryption with format base64('username:password')
 
 Then start nginx. So power bi report server url now using port 7000 save it for future use in .env file
 
