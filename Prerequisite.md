@@ -48,7 +48,7 @@ Save power bi report server url and windows credential(username and password) fo
 
 # Setup Nginx
 
-We need nginx to reverse proxy power bi report server because originally power bi report server using NTLM authentication and we want to change it to basic authentication (username, password)
+We need nginx to reverse proxy power bi report server because originally power bi report server using NTLM authentication and we want to change it to basic authentication with username and password
 
 First download it from https://nginx.org/en/download.html and run the installer
 
@@ -64,7 +64,6 @@ upstream http_backend {
 server {
     listen       7000;
     server_name  192.168.99.190;
-
     location / {
         proxy_pass         http://http_backend;
         proxy_set_header Host $host;
