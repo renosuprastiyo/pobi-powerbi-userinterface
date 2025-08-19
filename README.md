@@ -24,4 +24,5 @@ Manage LDAP Group
 
 Manage RLS
 
+![manage_rls](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/main/resources/manage_rls.png)
 ![manage_rls_view](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/main/resources/manage_rls_view.png)
