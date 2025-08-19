@@ -42,3 +42,42 @@ Save ldap_url, ldap dn(distinguished name), ldap admin user and ldap admin passw
 
 Download Power BI Report Server from https://www.microsoft.com/en-us/power-platform/products/power-bi/report-server and run the installer you can installed it on windows server machine or regular windows machine
 
+Power BI Report Server require database to save data so we will download sql server express from https://www.microsoft.com/en-us/download/details.aspx?id=101064 and run the installer
+
+Save power bi report server url and windows credential(username and password) for future use in .env file
+
+# Setup Nginx
+
+We need nginx to reverse proxy power bi report server because originally power bi report server using NTLM authentication and we want to change it to basic authentication (username, password)
+
+First download it from https://nginx.org/en/download.html and run the installer
+
+Before running nginx we want to change the power bi report server configuration on C:\Program Files\Microsoft Power BI Report Server\PBIRS\ReportServer\rsreportserver.config find part <RSWindowsNTLM/> and change it to <RSWindowsBasic/> then restart 
+
+On nginx side we also need to change the configuration in C:\nginx\conf\nginx.conf become like this
+
+upstream http_backend {
+    server 192.168.99.190:8789;
+    keepalive 16;
+}
+    
+server {
+    listen       7000;
+    server_name  192.168.99.190;
+
+    location / {
+        proxy_pass         http://http_backend;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header   Authorization "Basic bXVkYTpNdWRhQDEyMyE==";
+    }
+    ....
+}
+
+We change reverse the port from 8789 to 7000 and use basic authentication header using base64 encryption with format base64('username:password')
+
+Then start nginx. So power bi report server url now using port 7000 save it for future use in .env file
+
+That's it, now you can move to the next step
