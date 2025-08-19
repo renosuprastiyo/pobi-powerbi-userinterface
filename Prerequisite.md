@@ -15,7 +15,7 @@ don't forget to install mongodb client Compass for managing mongodb
 
 ![mongodb_createdb](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/main/resources/mongodb_createdb.png)
 
-Save mongodb url and database name for .env file
+Save mongodb url and database name for future use in .env file
 
 # Setup LDAP Server
 
@@ -36,7 +36,7 @@ docker run -d --net pobinet --ip 192.20.1.71 --hostname pobi-ldapui --add-host p
 
 docker ps
 
-Save ldap_url, ldap dn(distinguished name), ldap admin user and ldap admin password for .env file
+Save ldap_url, ldap dn(distinguished name), ldap admin user and ldap admin password for future use in .env file
 
 # Setup Power BI Report Server(On-prem)
 
