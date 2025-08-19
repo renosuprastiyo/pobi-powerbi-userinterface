@@ -11,4 +11,13 @@ With some feature such as :
 Build on MEN(MongoDB, ExpressJS, NodeJS) stack with bootstrap css also using LDAP, Power BI Report Server and Nginx.
 Here some picture from application
 
-![login_page](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/master/resources/login_page.jpg)
+Login Page
+![login_page](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/master/resources/login_page.png)
+
+Manage LDAP Group
+
+![manage_ldap_group](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/master/resources/manage_ldap_group.png)
+
+Manage RLS
+
+![manage_rls_view](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/master/resources/manage_rls_view.png)
