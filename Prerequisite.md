@@ -52,7 +52,7 @@ We need nginx to reverse proxy power bi report server because originally power b
 
 First download it from https://nginx.org/en/download.html and run the installer
 
-Before running nginx we want to change the power bi report server configuration on C:\Program Files\Microsoft Power BI Report Server\PBIRS\ReportServer\rsreportserver.config find part ```<RSWindowsNTLM/>``` and change it to ```<RSWindowsBasic/>``` then restart 
+Before running nginx we want to change the power bi report server configuration on C:\Program Files\Microsoft Power BI Report Server\PBIRS\ReportServer\rsreportserver.config find part ```<RSWindowsNTLM/>``` and change it to ```<RSWindowsBasic/>``` then restart power bi report server
 
 On nginx side we also need to change the configuration in C:\nginx\conf\nginx.conf become like this
 
