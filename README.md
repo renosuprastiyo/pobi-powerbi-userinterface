@@ -1,6 +1,6 @@
 # POBI - Power BI Interface
 
-POBI is backend application to serve power bi dashboard for hundreds to thousands users.
+POBI is backend application to serve power bi dashboard for hundreds to thousands users used in on-prem condition.
 
 With some feature such as :
 1. RBAC(Role based access control using LDAP
@@ -8,7 +8,8 @@ With some feature such as :
 3. LDAP Management
 4. Rule based RLS(Row Level Security) Management
 
-Build on MEN(MongoDB, ExpressJS, NodeJS) stack with bootstrap css also using LDAP, Power BI Report Server and Nginx.
+Build on MEN(MongoDB, ExpressJS, NodeJS) stack and bootstrap css with the help from LDAP, Power BI Report Server and Nginx.
+
 Here some picture from application
 
 Login Page
@@ -26,3 +27,14 @@ Manage RLS
 
 ![manage_rls](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/main/resources/manage_rls.png)
 ![manage_rls_view](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/main/resources/manage_rls_view.png)
+
+How to Use it
+
+1. Clone this repository
+2. Follow instruction in Prerequisite.md to setup NodeJS, MongoDB, LDAP Server, Power BI Report Server and Nginx
+3. cd backend
+4. npm start
+
+And it should run
+
+Cheers!!
