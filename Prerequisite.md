@@ -8,3 +8,4 @@ Download mongodb community version from https://www.mongodb.com/try/download/com
 don't forget to install mongodb client Compass for managing mongodb
 
 1.Open mongodb compass and create connection to mongodb server
+![mongodb_connection](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/main/resources/mongodb_connection.png)
