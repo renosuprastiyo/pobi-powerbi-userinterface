@@ -35,7 +35,7 @@ Manage RLS
 How to Use it
 
 1. Clone this repository
-2. Follow instruction in Prerequisite.md to setup NodeJS, MongoDB, LDAP Server, Power BI Report Server and Nginx
+2. Follow instruction in [Prerequisite.md](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/main/Prerequisite.md) to setup NodeJS, MongoDB, LDAP Server, Power BI Report Server and Nginx
 3. cd backend
 4. rename .env.example to .env and adjust it's content using your settings
 5. npm start
