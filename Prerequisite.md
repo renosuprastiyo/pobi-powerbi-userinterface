@@ -56,7 +56,8 @@ Before running nginx we want to change the power bi report server configuration 
 
 On nginx side we also need to change the configuration in C:\nginx\conf\nginx.conf become like this
 
-```upstream http_backend {
+```
+upstream http_backend {
     server 192.168.99.190:8789;
     keepalive 16;
 }
@@ -73,7 +74,8 @@ server {
         proxy_set_header   Authorization "Basic bXVkYTpNdWRhQDEyMyE==";
     }
     ....
-}```
+}
+```
 
 We change reverse the port from 8789 to 7000 and use basic authentication header using base64 encryption with format base64('username:password')
 
