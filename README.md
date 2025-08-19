@@ -19,6 +19,10 @@ View Dashboard
 ![dashboard_page](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/main/resources/dashboard_page.png)
 ![view_dashboard](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/main/resources/view_dashboard.png)
 
+Manage Dashboard
+
+![manage_dashboard](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/main/resources/manage_dashboard.png)
+
 Manage LDAP Group
 
 ![manage_ldap_group](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/main/resources/manage_ldap_group.png)
