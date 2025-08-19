@@ -12,12 +12,12 @@ Build on MEN(MongoDB, ExpressJS, NodeJS) stack with bootstrap css also using LDA
 Here some picture from application
 
 Login Page
-![login_page](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/master/resources/login_page.png)
+![login_page](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/main/resources/login_page.png)
 
 Manage LDAP Group
 
-![manage_ldap_group](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/master/resources/manage_ldap_group.png)
+![manage_ldap_group](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/main/resources/manage_ldap_group.png)
 
 Manage RLS
 
-![manage_rls_view](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/master/resources/manage_rls_view.png)
+![manage_rls_view](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/main/resources/manage_rls_view.png)
