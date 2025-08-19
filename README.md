@@ -3,7 +3,7 @@
 POBI is backend application to serve power bi dashboard for hundreds to thousands users used in on-prem condition.
 
 With some feature such as :
-1. RBAC(Role based access control using LDAP
+1. RBAC(Role based access control) using LDAP
 2. Dashboard Management(Upload your .pbix dashboard)
 3. LDAP Management
 4. Rule based RLS(Row Level Security) Management
