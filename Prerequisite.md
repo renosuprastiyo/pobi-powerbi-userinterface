@@ -19,7 +19,7 @@ Save mongodb url and database name for future use in .env file
 
 # Setup LDAP Server
 
-We will be using docker for this so ensure you have installed docker desktop from https://www.docker.com/ and run the installer
+We will be using docker for this so make sure you have downloaded docker desktop from https://www.docker.com/ and run the installer
 1. Create docker network
 
 docker network create --subnet=192.20.0.0/16 pobinet
