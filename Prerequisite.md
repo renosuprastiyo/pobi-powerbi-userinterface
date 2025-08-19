@@ -15,7 +15,7 @@ don't forget to install mongodb client Compass for managing mongodb
 
 ![mongodb_createdb](https://github.com/renosuprastiyo/pobi-powerbi-userinterface/blob/main/resources/mongodb_createdb.png)
 
-Remember mongodb url and database name that will be use in .env file
+Save mongodb url and database name for .env file
 
 # Setup LDAP Server
 
@@ -30,10 +30,15 @@ docker run -d --net pobinet --ip 192.20.1.70 --hostname pobi-ldap --name pobi-ld
 
 3. Run ldap ui container(for manage ldap)
 
-docker run -d --net pobinet --ip 192.20.1.71 --hostname pobi-ldapui --add-host pobi-ldap:192.20.1.60 --name pobi-ldapui -e LDAP_URI=ldap://pobi-ldap -e LDAP_BASE_DN=dc=YOURORGANIZATION,dc=org -e LDAP_REQUIRE_STARTTLS=FALSE -e LDAP_ADMIN_BIND_DN=cn=admin,dc=YOURORGANIZATION,dc=org -e LDAP_ADMIN_BIND_PWD=admin -e LDAP_IGNORE_CERT_ERRORS=true -e NO_HTTPS=TRUE -e PASSWORD_HASH=SSHA -e ACCEPT_WEAK_PASSWORDS=TRUE -e SERVER_HOSTNAME=pobi-ldapui:18070 -p 18070:80 -it wheelybird/ldap-user-manager:latest
+docker run -d --net pobinet --ip 192.20.1.71 --hostname pobi-ldapui --add-host pobi-ldap:192.20.1.70 --name pobi-ldapui -e LDAP_URI=ldap://pobi-ldap -e LDAP_BASE_DN=dc=YOURORGANIZATION,dc=org -e LDAP_REQUIRE_STARTTLS=FALSE -e LDAP_ADMIN_BIND_DN=cn=admin,dc=YOURORGANIZATION,dc=org -e LDAP_ADMIN_BIND_PWD=admin -e LDAP_IGNORE_CERT_ERRORS=true -e NO_HTTPS=TRUE -e PASSWORD_HASH=SSHA -e ACCEPT_WEAK_PASSWORDS=TRUE -e SERVER_HOSTNAME=pobi-ldapui:18070 -p 18070:80 -it wheelybird/ldap-user-manager:latest
 
 4. View your running container
 
 docker ps
 
-# Setup Power BI Report Server
+Save ldap_url, ldap dn(distinguished name), ldap admin user and ldap admin password for .env file
+
+# Setup Power BI Report Server(On-prem)
+
+Download Power BI Report Server from https://www.microsoft.com/en-us/power-platform/products/power-bi/report-server and run the installer you can installed it on windows server machine or regular windows machine
+
