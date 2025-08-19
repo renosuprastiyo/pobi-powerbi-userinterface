@@ -287,47 +287,6 @@ app.post("/manage/rls/create",encodeUrl, async (req,res)=>{
   }
 });
 
-app.post("/manage/rls/update",encodeUrl, async (req,res)=>{
-  var {rule_id,rulename,dataset,column,operator,clause} = req.body;
-  if(req.body.affected_0){affected=req.body.affected_0}
-  if(req.body.affected_1){affected=req.body.affected_1}
-  if(req.body.affected_2){affected=req.body.affected_2}
-  if(req.body.affected_3){affected=req.body.affected_3}
-  if(req.body.affected_4){affected=req.body.affected_4}
-  if(req.body.affected_5){affected=req.body.affected_5}
-  if(req.body.affected_6){affected=req.body.affected_6}
-  if(req.body.affected_7){affected=req.body.affected_7}
-  if(req.body.affected_8){affected=req.body.affected_8}
-  if(req.body.affected_9){affected=req.body.affected_9}
-  if(req.body.affected_10){affected=req.body.affected_10}
-  let dash_name;
-  let arg_clause = [];
-  affected = affected.split(',')
-  if(operator=='IN'){
-    clause = clause.split(',')
-    for(let x in clause){
-      arg_clause.push({"clause":clause[x]})
-    }
-  }else{
-    arg_clause.push({"clause":clause})
-  }
-  var dash = await dashboard.find({dash_id:dataset}).then(d => d);
-  dash = JSON.stringify(dash);
-  dash = dash.slice(1,-1);
-  dash = JSON.parse(dash);
-  for(let x in dash){
-    if(x=='dash_name')dash_name = dash[x]
-  }
-  const filter = {rule_id:rule_id};
-  const update = {rule_id:rule_id,rule_name:rulename,dash_id:dataset,dash_name:dash_name,dataset:dataset,kolom:column,operator:operator,clause:arg_clause};
-  await rls.updateOne(filter,update)
-  await rls_group.deleteMany(filter)
-  for(let x in affected){
-    await rls_group.create({rule_id:rule_id,rule_name:rulename,dataset:dataset,group:affected[x]})
-  }
-  res.send(userPage('Manage Row Level Security','RLS Rule Updated',req.session.users,req.session.role,req.session.reportid,req.session.reportname,req.session.alldashid,req.session.alldashname,req.session.user_group));
-})
-
 app.post("/manage/rls/delete",encodeUrl, async (req,res)=>{
   var ruleid = req.body.ruleid;
   const filter = {rule_id:ruleid};
@@ -485,6 +444,47 @@ app.post("/get/ldap/usergroup",encodeUrl, async(req,res) => {
     res.setHeader('Content-type', 'application/json');
     res.end(JSON.stringify(usergroup))
   })
+})
+
+app.post("/manage/rls/update",encodeUrl, async (req,res)=>{
+  var {rule_id,rulename,dataset,column,operator,clause} = req.body;
+  if(req.body.affected_0){affected=req.body.affected_0}
+  if(req.body.affected_1){affected=req.body.affected_1}
+  if(req.body.affected_2){affected=req.body.affected_2}
+  if(req.body.affected_3){affected=req.body.affected_3}
+  if(req.body.affected_4){affected=req.body.affected_4}
+  if(req.body.affected_5){affected=req.body.affected_5}
+  if(req.body.affected_6){affected=req.body.affected_6}
+  if(req.body.affected_7){affected=req.body.affected_7}
+  if(req.body.affected_8){affected=req.body.affected_8}
+  if(req.body.affected_9){affected=req.body.affected_9}
+  if(req.body.affected_10){affected=req.body.affected_10}
+  let dash_name;
+  let arg_clause = [];
+  affected = affected.split(',')
+  if(operator=='IN'){
+    clause = clause.split(',')
+    for(let x in clause){
+      arg_clause.push({"clause":clause[x]})
+    }
+  }else{
+    arg_clause.push({"clause":clause})
+  }
+  var dash = await dashboard.find({dash_id:dataset}).then(d => d);
+  dash = JSON.stringify(dash);
+  dash = dash.slice(1,-1);
+  dash = JSON.parse(dash);
+  for(let x in dash){
+    if(x=='dash_name')dash_name = dash[x]
+  }
+  const filter = {rule_id:rule_id};
+  const update = {rule_id:rule_id,rule_name:rulename,dash_id:dataset,dash_name:dash_name,dataset:dataset,kolom:column,operator:operator,clause:arg_clause};
+  await rls.updateOne(filter,update)
+  await rls_group.deleteMany(filter)
+  for(let x in affected){
+    await rls_group.create({rule_id:rule_id,rule_name:rulename,dataset:dataset,group:affected[x]})
+  }
+  res.send(userPage('Manage Row Level Security','RLS Rule Updated',req.session.users,req.session.role,req.session.reportid,req.session.reportname,req.session.alldashid,req.session.alldashname,req.session.user_group));
 })
 
 function checkUser(username, callback){
