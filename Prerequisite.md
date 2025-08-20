@@ -40,6 +40,8 @@ Download Power BI Report Server from https://www.microsoft.com/en-us/power-platf
 
 Power BI Report Server require database to save data so we will download sql server express from https://www.microsoft.com/en-us/download/details.aspx?id=101064 and run the installer
 
+Now run Report Server Configuration Manager, create connection with sql server then apply and start
+
 Save power bi report server url and windows credential(username and password) for future use in .env file
 
 # Setup Nginx
