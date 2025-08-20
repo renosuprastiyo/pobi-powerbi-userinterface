@@ -40,6 +40,6 @@ How to Use it
 4. rename .env.example to .env and adjust it's content using your settings
 5. npm start
 
-And it should run
+Now it should run and you can login using username adminpobi and password admin
 
 Cheers!!
