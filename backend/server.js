@@ -21,6 +21,7 @@ const rls_group = require("./model/rls_group-model");
 
 const { authenticate } = require('ldap-authentication');
 const { randomUUID } = require('crypto');
+const { ConnectionClosedEvent } = require("mongodb");
 
 var reportid = [];
 var reportname = [];
@@ -70,6 +71,17 @@ app.use(session({
 
 const client = ldap.createClient({url:ldap_url});
 client.on('connectError',(err) =>{console.log('Ldap not connected')})
+
+async function firstUse(){
+  const result = await profile.countDocuments({profile_name:'admins'}).then(f => f)
+  if(result == 0){
+    createProfile('admins',true);
+    createUser('Admin','Pobi','adminpobi','admin','admin@google.com',(err,success)=>{})
+    addUserToGroupLdap('admins','adminpobi',(err,success) =>{})
+  }
+}
+
+firstUse();
 
 const encodeBase64 = (data) => {
   return Buffer.from(data,'utf-8').toString('base64');
@@ -667,8 +679,8 @@ function createGroup(groupname,callback){
   });
 }
 
-async function createProfile(groupname){
-  return await profile.create({profile_name:groupname,is_admin:false,dashboard:[]}).then(p => p);
+async function createProfile(groupname,is_admin){
+  return await profile.create({profile_name:groupname,is_admin:is_admin,dashboard:[]}).then(p => p);
 }
 
 app.post("/ldap/create/user",encodeUrl, async (req,res)=>{
@@ -694,7 +706,7 @@ app.post("/ldap/create/group",encodeUrl, async (req,res)=>{
     if(groupExists){
       res.send(userPage('Create Group LDAP','Group Exists',req.session.users,req.session.role,req.session.reportid,req.session.reportname,req.session.alldashid,req.session.alldashname,req.session.user_group));
     }else{
-      createProfile(groupname)
+      createProfile(groupname,false)
       createGroup(groupname,(err,success) =>{
         if(!success){
           res.send(userPage('Create Group LDAP','Failed to add group',req.session.users,req.session.role,req.session.reportid,req.session.reportname,req.session.alldashid,req.session.alldashname,req.session.user_group));
