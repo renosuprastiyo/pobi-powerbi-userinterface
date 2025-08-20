@@ -32,6 +32,8 @@ docker run -d --net pobinet --ip 192.20.1.70 --hostname pobi-ldap --name pobi-ld
 
 docker run -d --net pobinet --ip 192.20.1.71 --hostname pobi-ldapui --add-host pobi-ldap:192.20.1.70 --name pobi-ldapui -e LDAP_URI=ldap://pobi-ldap -e LDAP_BASE_DN=dc=YOURORGANIZATION,dc=org -e LDAP_REQUIRE_STARTTLS=FALSE -e LDAP_ADMIN_BIND_DN=cn=admin,dc=YOURORGANIZATION,dc=org -e LDAP_ADMIN_BIND_PWD=admin -e LDAP_IGNORE_CERT_ERRORS=true -e NO_HTTPS=TRUE -e PASSWORD_HASH=SSHA -e ACCEPT_WEAK_PASSWORDS=TRUE -e SERVER_HOSTNAME=pobi-ldapui:18070 -p 18070:80 -it wheelybird/ldap-user-manager:latest
 
+For first use you need to setup ldapgui to connect to ldap server at yourip:18070/setup
+
 4. View your running container
 
 docker ps
