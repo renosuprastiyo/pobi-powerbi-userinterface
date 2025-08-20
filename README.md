@@ -40,7 +40,7 @@ How to Use it
 4. rename .env.example to .env and adjust it's content using your settings
 5. npm start
 6. login with username adminpobi and password admin
-7. upload your first dashboard to powerbi report server
+7. upload your first dashboard to powerbi report server(put your .pbix file in your documents folder C:\Users\YOURUSERNAME\Documents)
 8. assign dashboard to your profile/group in manage dashboard page
 9. create row level security rule for your profile/group
 10. ready to view your dashboard
