@@ -792,11 +792,10 @@ function getDashboards(){
 }
 
 app.post("/dashboard", encodeUrl, async (req, res)=>{
-    var username = req.body.username;
-    var password = req.body.password;
-    if(!req.session.users){req.session.users=username}
-    
-    let options = {
+    try{
+      var username = req.body.username;
+      var password = req.body.password;
+      let options = {
         ldapOpts: {
           url: `${ldap_url}`,
         },
@@ -811,132 +810,101 @@ app.post("/dashboard", encodeUrl, async (req, res)=>{
         groupMemberAttribute: 'uniqueMember',
       }
       let user = await authenticate(options)
-      var json_user = JSON.stringify(user)
-      var j = JSON.parse(json_user)
-      for (let p in j) {
+      if(user){
+        if(!req.session.users){req.session.users=username}
+        var json_user = JSON.stringify(user)
+        var j = JSON.parse(json_user)
+        for (let p in j) {
           if(p=="groups"){
-              var group = j[p]
-          }
-      }
-      for (let k in group[group.length-1]) {
-          if(k=="attributes"){
-              var attrib = group[group.length-1][k]
-          }
-      }
-      for (let x in attrib){
-          if(attrib[x]['type']=="cn"){
-            var groups = attrib[x]['values'][0];
-            const filter = {profile_name: groups};
-            var roleuser = await profile.find(filter).then(function(data){var is_admins = JSON.stringify(data[0]["is_admin"]) === null || JSON.stringify(data[0]["is_admin"]) === undefined ? false:JSON.stringify(data[0]["is_admin"]);return is_admins;}).catch(function(err){console.log(err)})
-          }
-      }
-      if(!req.session.user_group){req.session.user_group=groups}
-      if(!req.session.role){req.session.role=JSON.stringify(roleuser)}
-
-      var dashid = [];
-      var dashname = [];
-      var cus = await custom.findOne({user_name:req.session.users}).then(c => c);
-      if(cus!==null){
-        if(typeof(cus['dashboard'])=='object'){
-          for(let c in cus['dashboard']){
-            dashid.push({'id':cus['dashboard'][c]});
-            var dash = await dashboard.findOne({dash_id:cus['dashboard'][c]}).then(d => d);
-            dash = JSON.parse(JSON.stringify(dash));
-            for(let x in dash){
-              if(x=='dash_name')dashname.push({'name':dash[x]});
+            var group = j[p]
             }
           }
-          if(!req.session.reportid){req.session.reportid=JSON.stringify(dashid)}
-          if(!req.session.reportname){req.session.reportname=JSON.stringify(dashname)}
-        }else if(typeof(cus['dashboard'])=='string'){
-          dashid.push({'id':cus['dashboard']});
-          var dash = await dashboard.findOne({dash_id:cus['dashboard']}).then(d => d);
-          dash = JSON.parse(JSON.stringify(dash));
-          for(let x in dash){
-            if(x=='dash_name')dashname.push({'name':dash[x]});
+          for (let k in group[group.length-1]) {
+            if(k=="attributes"){
+              var attrib = group[group.length-1][k]
+            }
           }
-          if(!req.session.reportid){req.session.reportid=JSON.stringify(dashid)}
-          if(!req.session.reportname){req.session.reportname=JSON.stringify(dashname)}
-        }
-      }else{
-        if(req.session.user_group!=null){
-          var pfs = await profile.findOne({profile_name:req.session.user_group}).then(p => p);
-          if(typeof(pfs['dashboard'])=='object'){
-            for(let c in pfs['dashboard']){
-              dashid.push({'id':pfs['dashboard'][c]});
-              var dash = await dashboard.findOne({dash_id:pfs['dashboard'][c]}).then(d => d);
+          for (let x in attrib){
+            if(attrib[x]['type']=="cn"){
+              var groups = attrib[x]['values'][0];
+              const filter = {profile_name: groups};
+              var roleuser = await profile.find(filter).then(function(data){var is_admins = JSON.stringify(data[0]["is_admin"]) === null || JSON.stringify(data[0]["is_admin"]) === undefined ? false:JSON.stringify(data[0]["is_admin"]);return is_admins;}).catch(function(err){console.log(err)})
+            }
+          }
+          if(!req.session.user_group){req.session.user_group=groups}
+          if(!req.session.role){req.session.role=JSON.stringify(roleuser)}
+          var dashid = [];
+          var dashname = [];
+          var cus = await custom.findOne({user_name:req.session.users}).then(c => c);
+          if(cus!==null){
+            if(typeof(cus['dashboard'])=='object'){
+              for(let c in cus['dashboard']){
+                dashid.push({'id':cus['dashboard'][c]});
+                var dash = await dashboard.findOne({dash_id:cus['dashboard'][c]}).then(d => d);
+                dash = JSON.parse(JSON.stringify(dash));
+                for(let x in dash){
+                  if(x=='dash_name')dashname.push({'name':dash[x]});
+                }
+              }
+              if(!req.session.reportid){req.session.reportid=JSON.stringify(dashid)}
+              if(!req.session.reportname){req.session.reportname=JSON.stringify(dashname)}
+            }else if(typeof(cus['dashboard'])=='string'){
+              dashid.push({'id':cus['dashboard']});
+              var dash = await dashboard.findOne({dash_id:cus['dashboard']}).then(d => d);
               dash = JSON.parse(JSON.stringify(dash));
               for(let x in dash){
                 if(x=='dash_name')dashname.push({'name':dash[x]});
               }
+              if(!req.session.reportid){req.session.reportid=JSON.stringify(dashid)}
+              if(!req.session.reportname){req.session.reportname=JSON.stringify(dashname)}
             }
-            if(!req.session.reportid){req.session.reportid=JSON.stringify(dashid)}
-            if(!req.session.reportname){req.session.reportname=JSON.stringify(dashname)}
-          }else if(typeof(pfs['dashboard'])=='string'){
-            dashid.push({'id':pfs['dashboard']});
-            var dash = await dashboard.findOne({dash_id:pfs['dashboard']}).then(d => d);
-            dash = JSON.parse(JSON.stringify(dash));
-            for(let x in dash){
-              if(x=='dash_name')dashname.push({'name':dash[x]});
-            }
-            if(!req.session.reportid){req.session.reportid=JSON.stringify(dashid)}
-            if(!req.session.reportname){req.session.reportname=JSON.stringify(dashname)}
-          }
-        }
-      }
-      var all_dash = await dashboard.find().then(a => a);
-      all_dash = JSON.parse(JSON.stringify(all_dash));
-      var all_dash_id = [];
-      var all_dash_name = [];
-      for(x=0;x<all_dash.length;x++){
-        for(let y in all_dash[x]){
-          if(y=='dash_id')all_dash_id.push({'id':all_dash[x][y]})
-          if(y=='dash_name')all_dash_name.push({'name':all_dash[x][y]})
-        }
-      }
-      if(!req.session.alldashid){req.session.alldashid=JSON.stringify(all_dash_id)}
-      if(!req.session.alldashname){req.session.alldashname=JSON.stringify(all_dash_name)}
-
-    function getPublishedReport(){
-      const {exec} = require('node:child_process');
-      const ps = exec('powershell "Connect-PowerBIServiceAccount";"Get-PowerBIReport | ConvertTo-Json"');
-      ps.stdout.on('data', (data) => {
-          let dashboard = data.toString().split(/\r?\n/);
-          var prop = [];
-          var extract = [];
-          var extract2 = [];
-          Object.keys(dashboard).forEach(e => dashboard[e]!==''?prop.push(dashboard[e]):console.log(''));
-          for(let x in prop){
-              if(prop[x].indexOf('Id        :')!=-1 || prop[x].indexOf('Name      :')!=-1)extract.push(prop[x])
-          }
-          for(let y in extract){
-            if(extract[y].length>0)extract2.push(extract[y])
-          }
-          for(let z in extract2){
-            if(extract2[z].indexOf('Id        :')!=-1){
-              reportid.push({'id':extract2[z].substring(extract2[z].indexOf(':')+2,extract2[z].toString().length)});
-              pubdashid.push(extract2[z].substring(extract2[z].indexOf(':')+2,extract2[z].toString().length));
-            }
-            if(extract2[z].indexOf('Name      :')!=-1){
-              reportname.push({'name':extract2[z].substring(extract2[z].indexOf(':')+2,extract2[z].toString().length)});
-              pubdashname.push(extract2[z].substring(extract2[z].indexOf(':')+2,extract2[z].toString().length));
+          }else{
+            if(req.session.user_group!=null){
+              var pfs = await profile.findOne({profile_name:req.session.user_group}).then(p => p);
+              if(typeof(pfs['dashboard'])=='object'){
+                for(let c in pfs['dashboard']){
+                  dashid.push({'id':pfs['dashboard'][c]});
+                  var dash = await dashboard.findOne({dash_id:pfs['dashboard'][c]}).then(d => d);
+                  dash = JSON.parse(JSON.stringify(dash));
+                  for(let x in dash){
+                    if(x=='dash_name')dashname.push({'name':dash[x]});
+                  }
+                }
+                if(!req.session.reportid){req.session.reportid=JSON.stringify(dashid)}
+                if(!req.session.reportname){req.session.reportname=JSON.stringify(dashname)}
+              }else if(typeof(pfs['dashboard'])=='string'){
+                dashid.push({'id':pfs['dashboard']});
+                var dash = await dashboard.findOne({dash_id:pfs['dashboard']}).then(d => d);
+                dash = JSON.parse(JSON.stringify(dash));
+                for(let x in dash){
+                  if(x=='dash_name')dashname.push({'name':dash[x]});
+                }
+                if(!req.session.reportid){req.session.reportid=JSON.stringify(dashid)}
+                if(!req.session.reportname){req.session.reportname=JSON.stringify(dashname)}
+              }
             }
           }
-      });
-    }
-    try{
-        if(user){
+          var all_dash = await dashboard.find().then(a => a);
+          all_dash = JSON.parse(JSON.stringify(all_dash));
+          var all_dash_id = [];
+          var all_dash_name = [];
+          for(x=0;x<all_dash.length;x++){
+            for(let y in all_dash[x]){
+              if(y=='dash_id')all_dash_id.push({'id':all_dash[x][y]})
+              if(y=='dash_name')all_dash_name.push({'name':all_dash[x][y]})
+            }
+          }
+          if(!req.session.alldashid){req.session.alldashid=JSON.stringify(all_dash_id)}
+          if(!req.session.alldashname){req.session.alldashname=JSON.stringify(all_dash_name)}
           res.set({
             'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
             'Pragma': 'no-cache',
             'Expires': 0
           });
           res.send(userPage(header='Welcome to POBI',msg='Your Power BI Dashboard Viewer',req.session.users,req.session.role,req.session.reportid,req.session.reportname,req.session.alldashid,req.session.alldashname,req.session.user_group));
-        }else{
-          res.sendFile(__dirname + '/failLog.html');
         }
     }catch(e){
-        console.error(e)
+        res.redirect('/')
     }
 });
 
