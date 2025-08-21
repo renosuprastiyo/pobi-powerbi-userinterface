@@ -21,7 +21,6 @@ const rls_group = require("./model/rls_group-model");
 
 const { authenticate } = require('ldap-authentication');
 const { randomUUID } = require('crypto');
-const { ConnectionClosedEvent } = require("mongodb");
 
 var reportid = [];
 var reportname = [];
