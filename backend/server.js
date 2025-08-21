@@ -74,7 +74,7 @@ client.on('connectError',(err) =>{console.log('Ldap not connected')})
 async function firstUse(){
   const result = await profile.countDocuments({profile_name:'admins'}).then(f => f)
   if(result == 0){
-    createProfile('admins',true);
+    createProfile('admins',true)
     createUser('Admin','Pobi','adminpobi','admin','admin@google.com',(err,success)=>{})
     addUserToGroupLdap('admins','adminpobi',(err,success) =>{})
   }
@@ -92,66 +92,6 @@ function sleep(milliseconds) {
   do {
     currentDate = Date.now();
   } while (currentDate - date < milliseconds);
-}
-
-function get_ldap_user(){
-  client.bind(`cn=${ldap_admin},${ldap_dn}`,`${ldap_password}`,(err) => {
-  var result = [];
-    if(err){
-      console.log(err)
-    }else{
-      const opts = {filter:'(objectClass=Person)',scope:'sub',attributes:['cn']};
-      client.search(`${ldap_dn}`,opts,(err,res) =>{
-        var j = 0;
-        res.on('searchEntry', (entry) => {
-          var entries = JSON.stringify(entry.pojo).toLocaleLowerCase();
-          var ent = JSON.parse(entries);
-          var arr_ent = [];
-          for(let x in ent){
-            arr_ent.push(ent[x]+",")
-          }
-          var obj_arr = arr_ent[3].split(',');
-          var obj = [];
-          for(let y in obj_arr){
-            if(y==0)obj.push(obj_arr[y].substring(4))
-          }
-          result[j] = {'user':obj};
-          j++;
-        });
-        res.on('error', (err) => {
-          console.error('error: ' + err.message);
-        });
-      })
-    }
-  })
-}
-get_ldap_user();
-
-function get_ldap_profile(user_ldap){
-  client.bind(`cn=${ldap_admin},${ldap_dn}`,`${ldap_password}`,(err) => {
-    if(err){
-      console.log(err)
-    }else{
-      const opts = {filter:'(&(objectClass=person)(memberof=cn=*,ou=people))',scope:'sub',attributes:['cn']};
-      client.search(`${ldap_dn}`,opts,(err,res) =>{
-        res.on('searchRequest', (searchRequest) => {
-          console.log('searchRequest: ', searchRequest.messageId);
-        });
-        res.on('searchEntry', (entry) => {
-          console.log('entry: ' + JSON.stringify(entry.pojo));
-        });
-        res.on('searchReference', (referral) => {
-          console.log('referral: ' + referral.uris.join());
-        });
-        res.on('error', (err) => {
-          console.error('error: ' + err.message);
-        });
-        res.on('end', (result) => {
-          console.log('status: ' + result.status);
-        });
-      })
-    }
-  })
 }
 
 app.get('/', (req, res) => {
@@ -497,6 +437,66 @@ app.post("/manage/rls/update",encodeUrl, async (req,res)=>{
   }
   res.send(userPage('Manage Row Level Security','RLS Rule Updated',req.session.users,req.session.role,req.session.reportid,req.session.reportname,req.session.alldashid,req.session.alldashname,req.session.user_group));
 })
+
+function get_ldap_user(){
+  client.bind(`cn=${ldap_admin},${ldap_dn}`,`${ldap_password}`,(err) => {
+  var result = [];
+    if(err){
+      console.log(err)
+    }else{
+      const opts = {filter:'(objectClass=Person)',scope:'sub',attributes:['cn']};
+      client.search(`${ldap_dn}`,opts,(err,res) =>{
+        var j = 0;
+        res.on('searchEntry', (entry) => {
+          var entries = JSON.stringify(entry.pojo).toLocaleLowerCase();
+          var ent = JSON.parse(entries);
+          var arr_ent = [];
+          for(let x in ent){
+            arr_ent.push(ent[x]+",")
+          }
+          var obj_arr = arr_ent[3].split(',');
+          var obj = [];
+          for(let y in obj_arr){
+            if(y==0)obj.push(obj_arr[y].substring(4))
+          }
+          result[j] = {'user':obj};
+          j++;
+        });
+        res.on('error', (err) => {
+          console.error('error: ' + err.message);
+        });
+      })
+    }
+  })
+}
+get_ldap_user();
+
+function get_ldap_profile(user_ldap){
+  client.bind(`cn=${ldap_admin},${ldap_dn}`,`${ldap_password}`,(err) => {
+    if(err){
+      console.log(err)
+    }else{
+      const opts = {filter:'(&(objectClass=person)(memberof=cn=*,ou=people))',scope:'sub',attributes:['cn']};
+      client.search(`${ldap_dn}`,opts,(err,res) =>{
+        res.on('searchRequest', (searchRequest) => {
+          console.log('searchRequest: ', searchRequest.messageId);
+        });
+        res.on('searchEntry', (entry) => {
+          console.log('entry: ' + JSON.stringify(entry.pojo));
+        });
+        res.on('searchReference', (referral) => {
+          console.log('referral: ' + referral.uris.join());
+        });
+        res.on('error', (err) => {
+          console.error('error: ' + err.message);
+        });
+        res.on('end', (result) => {
+          console.log('status: ' + result.status);
+        });
+      })
+    }
+  })
+}
 
 function checkUser(username, callback){
   const opts = {filter:`(uid=${username})`,scope:'sub'};
