@@ -103,10 +103,6 @@ app.get("/login", (req, res)=>{
     res.sendFile(__dirname + "/login.html");
 });
 
-app.get("/embed", (req,res)=>{
-  res.sendFile(__dirname + "/embed.html");
-});
-
 app.get("/get/dashboard", encodeUrl, async (req,res) => {
   let response = [];
   let dash_id = [];
