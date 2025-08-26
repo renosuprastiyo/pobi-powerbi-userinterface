@@ -75,7 +75,7 @@ async function firstUse(){
   const result = await profile.countDocuments({profile_name:'admins'}).then(f => f)
   if(result == 0){
     createProfile('admins',true)
-    createUser('Admin','Pobi','adminpobi','admin','admin@google.com',(err,success)=>{})
+    createUser('Admin','Pobi','adminpobi','admin','admin@example.com',(err,success)=>{})
     addUserToGroupLdap('admins','adminpobi',(err,success) =>{})
   }
 }
