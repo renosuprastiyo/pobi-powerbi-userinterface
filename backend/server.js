@@ -3,15 +3,14 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const http = require('http');
-var parseUrl = require('body-parser');
-const app = express();
+const parseUrl = require('body-parser');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 
-var ssha = require('ssha');
-var ldap = require('ldapjs');
-var cors = require('cors');
-var multer  = require('multer')();
+const ssha = require('ssha');
+const ldap = require('ldapjs');
+const cors = require('cors');
+const multer  = require('multer')();
 
 const dashboard = require("./model/dashboard-model");
 const profile = require("./model/profile-model");
@@ -22,12 +21,10 @@ const rls_group = require("./model/rls_group-model");
 const { authenticate } = require('ldap-authentication');
 const { randomUUID } = require('crypto');
 
-var reportid = [];
-var reportname = [];
-var pubdashid = [];
-var pubdashname = [];
-
 let encodeUrl = parseUrl.urlencoded({ extended: true });
+
+const app = express();
+
 app.use(parseUrl.json());
 
 app.use('/js', express.static('./node_modules/bootstrap/dist/js/'));
