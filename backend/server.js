@@ -45,14 +45,14 @@ app.use(cookieParser());
 
 const port = process.env.PORT || 3000;
 const mongo_dbname = process.env.MONGO_SERVER_DBNAME;
-const mongo_url = process.env.MONGO_SERVER_URL + ':' + process.env.MONGO_SERVER_PORT +'/' + mongo_dbname;
+const mongo_url = process.env.MONGO_SERVER_URL + ':' + process.env.MONGO_SERVER_PORT + '/' + mongo_dbname;
 const ldap_url = process.env.LDAP_SERVER_URL + ':' + process.env.LDAP_SERVER_PORT;
 const ldap_dn = process.env.LDAP_SERVER_DN;
 const ldap_admin = process.env.LDAP_SERVER_ADMIN;
 const ldap_password = process.env.LDAP_SERVER_PASSWORD;
 const pbi_report_url = process.env.PBI_SERVER_URL + ':' + process.env.PBI_SERVER_PORT_REVERSE + '/' + process.env.PBI_SERVER_REPORT_SUFFIX
 const pbi_api_url = process.env.PBI_SERVER_URL + ':' + process.env.PBI_SERVER_PORT_REVERSE + '/' + process.env.PBI_SERVER_API_SUFFIX
-const pbi_upload_url = process.env.PBI_SERVER_URL + ':' + process.env.PBI_SERVER_PORT_DEFAULT + '/Reports'
+const pbi_upload_url = process.env.PBI_SERVER_URL + ':' + process.env.PBI_SERVER_PORT_DEFAULT + '/' + process.env.PBI_SERVER_PORTAL_SUFFIX
 const pbi_login = process.env.PBI_SERVER_LOGIN;
 const pbi_password = process.env.PBI_SERVER_PASSWORD;
 
