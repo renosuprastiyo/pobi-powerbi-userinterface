@@ -1,3 +1,11 @@
+# Setup Powershell(if not installed)
+
+Download Powershell from https://github.com/PowerShell/PowerShell/releases/download/v7.5.3/PowerShell-7.5.3-win-x64.msi
+
+Open command prompt with admin rights and go to download folder
+
+Run ```msiexec /i PowerShell-7.5.3-win-x64.msi /quiet /norestart```
+
 # Setup NodeJS
 
 Download nodejs from https://nodejs.org/en/download and run the installer
