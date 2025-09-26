@@ -75,7 +75,7 @@ async function firstUse(){
     createProfile('admins',true)
     createUser('Admin','Pobi','adminpobi','admin','admin@example.com',(err,success)=>{})
     addUserToGroupLdap('admins','adminpobi',(err,success) =>{})
-    uploadPowershellScript()
+    updatePowershellScript()
   }
 }
 
@@ -93,7 +93,7 @@ function sleep(milliseconds) {
   } while (currentDate - date < milliseconds);
 }
 
-function uploadPowershellScript(){
+function updatePowershellScript(){
   const {exec} = require('node:child_process');
   try{
     let updateUsername = exec(`powershell "(Get-Content .\\upload.ps1).Replace('$userName = ','$userName = \"""${pbi_login}\"""') | Set-Content .\\upload.ps1"`)
