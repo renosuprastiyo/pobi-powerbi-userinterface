@@ -1,9 +1,9 @@
-[string]$userName = 'POBIUAT227\reno'
-[string]$userPassword = 'RenoSuprastiyo@789!'
+$userName = 
+$userPassword = 
 [securestring]$secStringPassword = ConvertTo-SecureString $userPassword -AsPlainText -Force
 $Credential = New-Object System.Management.Automation.PSCredential ($userName, $secStringPassword)
 
-$ReportPortal = "http://192.168.99.190:8789/Reports"
+$ReportPortal = 
 $ReportName = 
 $ReportTargetPath = "/"
 $LoginDir = $($env:USERNAME)

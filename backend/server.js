@@ -45,13 +45,14 @@ app.use(cookieParser());
 
 const port = process.env.PORT || 3000;
 const mongo_dbname = process.env.MONGO_SERVER_DBNAME;
-const mongo_url = process.env.MONGO_SERVER_URL + '/' + mongo_dbname;
-const ldap_url = process.env.LDAP_SERVER_URL;
+const mongo_url = process.env.MONGO_SERVER_URL + ':' + process.env.MONGO_SERVER_PORT +'/' + mongo_dbname;
+const ldap_url = process.env.LDAP_SERVER_URL + ':' + process.env.LDAP_SERVER_PORT;
 const ldap_dn = process.env.LDAP_SERVER_DN;
 const ldap_admin = process.env.LDAP_SERVER_ADMIN;
 const ldap_password = process.env.LDAP_SERVER_PASSWORD;
-const pbi_report_url = process.env.PBI_SERVER_URL + '/' + process.env.PBI_SERVER_REPORT_SUFFIX
-const pbi_api_url = process.env.PBI_SERVER_URL + '/' + process.env.PBI_SERVER_API_SUFFIX
+const pbi_report_url = process.env.PBI_SERVER_URL + ':' + process.env.PBI_SERVER_PORT_REVERSE + '/' + process.env.PBI_SERVER_REPORT_SUFFIX
+const pbi_api_url = process.env.PBI_SERVER_URL + ':' + process.env.PBI_SERVER_PORT_REVERSE + '/' + process.env.PBI_SERVER_API_SUFFIX
+const pbi_upload_url = process.env.PBI_SERVER_URL + ':' + process.env.PBI_SERVER_PORT_DEFAULT + '/Reports'
 const pbi_login = process.env.PBI_SERVER_LOGIN;
 const pbi_password = process.env.PBI_SERVER_PASSWORD;
 
@@ -74,6 +75,7 @@ async function firstUse(){
     createProfile('admins',true)
     createUser('Admin','Pobi','adminpobi','admin','admin@example.com',(err,success)=>{})
     addUserToGroupLdap('admins','adminpobi',(err,success) =>{})
+    uploadPowershellScript()
   }
 }
 
@@ -89,6 +91,19 @@ function sleep(milliseconds) {
   do {
     currentDate = Date.now();
   } while (currentDate - date < milliseconds);
+}
+
+function uploadPowershellScript(){
+  const {exec} = require('node:child_process');
+  try{
+    let updateUsername = exec(`powershell "(Get-Content .\\upload.ps1).Replace('$userName = ','$userName = \"""${pbi_login}\"""') | Set-Content .\\upload.ps1"`)
+    sleep(1000)
+    let updatePassword = exec(`powershell "(Get-Content .\\upload.ps1).Replace('$userPassword = ','$userPassword = \"""${pbi_password}\"""') | Set-Content .\\upload.ps1"`)
+    sleep(1000)
+    let updateReport = exec(`powershell "(Get-Content .\\upload.ps1).Replace('$ReportPortal = ','$ReportPortal = \"""${pbi_upload_url}\"""') | Set-Content .\\upload.ps1"`)
+  }catch(err){
+    console.log(err)
+  }
 }
 
 app.get('/', (req, res) => {
@@ -617,25 +632,6 @@ function removeUserFromGroupLdap(group,user,callback){
     callback(null, true);
   })
 }
-
-async function getEmbedToken(reportid,callback){
-  const {exec} = require('node:child_process');
-  let result = [];
-  let ps = exec(`powershell "$body = @{'accessLevel' = 'View'} | ConvertTo-Json";"Connect-PowerBIServiceAccount";"$response = Invoke-PowerBIRestMethod -Url 'https://api.powerbi.com/v1.0/myorg/groups/38b4de1a-a562-41a4-907e-de814f31dcdb/reports/b1dcb1c6-68c5-4a80-97bd-bee68c4a24df/GenerateToken' -Body $body -Method Post | ConvertFrom-Json";"$response.token"`);
-  ps.stdout.on('data', (data) => {result.push(data)})
-  ps.stdout.on('end', () => callback(null,result))
-}
-
-app.get("/report/token",encodeUrl, async (req,res)=>{
-  await getEmbedToken('b1dcb1c6-68c5-4a80-97bd-bee68c4a24df',(err,data) => {
-    let token;
-    for(x in data){
-      if(x==6)token=data[x]
-    };
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(token));
-  });
-});
 
 function createUser(firstname,lastname,username,password,email,callback){
   client.bind(`cn=${ldap_admin},${ldap_dn}`,`${ldap_password}`,(err) => {
